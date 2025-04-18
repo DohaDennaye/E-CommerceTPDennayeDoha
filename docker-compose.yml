@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  produit-service:
+    build: ./produit-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/produit-service
+    networks:
+      - ecommerce-network
+
+  commande-service:
+    build: ./commande-service
+    ports:
+      - "4001:4001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/commande-service
+    networks:
+      - ecommerce-network
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "4002:4002"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/auth-service
+    networks:
+      - ecommerce-network
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
